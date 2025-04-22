@@ -14,6 +14,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("首頁", systemImage: "house")
                 }
+                .ignoresSafeArea()
             
             MapView()
                 .tabItem {
@@ -30,6 +31,7 @@ struct ContentView: View {
                     Label("天氣", systemImage: "cloud.sun")
                 }
         }
+        .ignoresSafeArea(.all, edges: .top)
     }
 }
 
