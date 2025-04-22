@@ -3,23 +3,38 @@ import MapKit
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
+    @State private var showLoginSheet = false
     
     var body: some View {
         VStack(spacing: -40) {
-            // 輪播圖區域
-            BaseCarouselView(
-                itemCount: viewModel.carouselItems.count,
-                currentIndex: $viewModel.currentCarouselIndex
-            ) {
-                ForEach(viewModel.carouselItems) { item in
-                    CarouselItemView(item: item)
+            ZStack(alignment: .topTrailing) {
+                // 輪播圖區域
+                BaseCarouselView(
+                    itemCount: viewModel.carouselItems.count,
+                    currentIndex: $viewModel.currentCarouselIndex
+                ) {
+                    ForEach(viewModel.carouselItems) { item in
+                        CarouselItemView(item: item)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 650)
+                .ignoresSafeArea(.all)
+                
+                // 帳戶圖標按鈕
+                Button {
+                    showLoginSheet = true
+                } label: {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.gray)
+                        .padding(.top, 60)
+                        .padding(.trailing, 20)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .frame(height: 650)
-            .ignoresSafeArea(.all)
             
-            // 確認 WeatherInfoCard 的使用
+            // WeatherInfoCard
             WeatherInfoCard(
                 weather: viewModel.weather,
                 location: viewModel.location
@@ -29,6 +44,9 @@ struct HomeView: View {
             Spacer()
         }
         .ignoresSafeArea(.all, edges: .top)
+        .sheet(isPresented: $showLoginSheet) {
+            LoginView()
+        }
     }
 }
 
