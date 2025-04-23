@@ -30,6 +30,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("天氣", systemImage: "cloud.sun")
                 }
+
+            TestView() // UIKit 包裝的 View
+                .tabItem {
+                    Label("個人", systemImage: "person.circle")
+                }
         }
         .ignoresSafeArea(.all, edges: .top)
     }
