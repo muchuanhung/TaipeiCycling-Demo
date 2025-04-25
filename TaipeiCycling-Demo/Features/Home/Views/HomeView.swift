@@ -47,6 +47,12 @@ struct HomeView: View {
         .sheet(isPresented: $showLoginSheet) {
             LoginView()
         }
+        .onAppear {
+            print("📱 HomeView 出現")
+        }
+        .onDisappear {
+            print("⚠️ HomeView 消失")
+        }
     }
 }
 

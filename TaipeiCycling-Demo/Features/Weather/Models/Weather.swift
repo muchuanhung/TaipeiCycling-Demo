@@ -10,4 +10,11 @@ struct Weather: Codable {
     var temperatureCelsius: String {
         return String(format: "%.1f°C", temperature)  // 將溫度格式化為帶有一位小數的攝氏度字串
     }
+    // 提供默認值的初始化方法
+    init(temperature: Double = 0.0, humidity: Int = 0, condition: String = "", windSpeed: Double = 0.0) {
+        self.temperature = temperature
+        self.humidity = humidity
+        self.condition = condition
+        self.windSpeed = windSpeed
+    }
 }
