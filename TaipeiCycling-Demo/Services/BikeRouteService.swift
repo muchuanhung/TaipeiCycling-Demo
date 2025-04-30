@@ -26,7 +26,6 @@ class BikeRouteService {
         // 這裡可以返回一些預設的台北自行車路線
         return [
             BikeRoute(
-                id: "local-1",
                 name: "河濱自行車道",
                 description: "台北最受歡迎的河濱自行車道，沿著淡水河騎乘，景色優美。",
                 distance: 15.5,
@@ -34,7 +33,6 @@ class BikeRouteService {
                 difficulty: .easy
             ),
             BikeRoute(
-                id: "local-2",
                 name: "關渡-八里路線",
                 description: "從關渡騎到八里，可欣賞河岸風光，途經關渡大橋。",
                 distance: 22.0,
@@ -42,7 +40,6 @@ class BikeRouteService {
                 difficulty: .moderate
             ),
             BikeRoute(
-                id: "local-3",
                 name: "內湖-南港路線",
                 description: "穿越內湖科技園區到南港，有一定的爬坡，適合挑戰。",
                 distance: 18.5,

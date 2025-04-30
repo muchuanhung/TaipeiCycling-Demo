@@ -15,6 +15,7 @@ class StravaAuthService: ObservableObject {
     @Published var isAuthenticated = false
     @Published var accessToken: String?
     
+    // 授權流程
     func authorize() {
         print("\n=== 🚀 開始 Strava 授權流程 ===")
         print("📝 Client ID: \(clientID)")
@@ -62,5 +63,22 @@ class StravaAuthService: ObservableObject {
                 print("========================\n")
             }
         }
+    }
+
+    // 登出
+    func logout() {
+        print("🚪 開始登出...")
+        
+        // 清除本地保存的授權數據
+        UserDefaults.standard.removeObject(forKey: "strava_token")
+        
+        // 更新狀態
+        self.accessToken = nil
+        self.isAuthenticated = false
+        
+        // 清除 OAuth 實例
+        self.oauthswift = nil
+        
+        print("✅ 登出成功")
     }
 } 

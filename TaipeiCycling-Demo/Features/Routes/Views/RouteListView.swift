@@ -3,6 +3,7 @@ import SwiftUI
 struct RouteListView: View {
     @StateObject private var viewModel = RouteListViewModel()
     @State private var showLoginSheet = false
+    @ObservedObject private var authService = StravaAuthService.shared
     
     var body: some View {
         NavigationView {
@@ -15,7 +16,7 @@ struct RouteListView: View {
                             .foregroundColor(.red)
                             .padding()
                         
-                        if errorMessage.contains("請先登入") {
+                        if errorMessage.contains("請先登入 Strava") {
                             Button {
                                 showLoginSheet = true
                             } label: {
@@ -85,22 +86,19 @@ struct RouteListView: View {
                         showLoginSheet = true
                     } label: {
                         Image(systemName: "person.circle")
+                            .foregroundColor(authService.isAuthenticated ? .green : .gray)
                     }
                 }
             }
             .sheet(isPresented: $showLoginSheet) {
                 LoginView()
-                    .onDisappear {
-                        if StravaAuthService.shared.isAuthenticated {
-                            viewModel.fetchRoutes()
-                        }
-                    }
             }
         }
         .onAppear {
-            if StravaAuthService.shared.isAuthenticated && viewModel.routes.isEmpty {
-                viewModel.fetchRoutes()
-            }
+            viewModel.fetchRoutes()
+        }
+        .onChange(of: authService.isAuthenticated) { _, newValue in
+            viewModel.fetchRoutes()
         }
     }
 }

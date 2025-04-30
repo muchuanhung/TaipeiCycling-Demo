@@ -23,12 +23,27 @@ struct LoginView: View {
                     .foregroundColor(.gray)
                 
                 if authService.isAuthenticated {
-                    VStack(spacing: 8) {
-                        Text("🎉 已登入 Strava")
-                            .font(.headline)
-                        Text("Token: \(authService.accessToken ?? "N/A")")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+                    VStack(spacing: 16) {
+                        VStack(spacing: 8) {
+                            Text("🎉 已登入 Strava")
+                                .font(.headline)
+                            Text("Token: \(authService.accessToken?.prefix(20) ?? "")...")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        // 添加登出按鈕
+                        Button {
+                            authService.logout()
+                        } label: {
+                            Text("登出 Strava")
+                                .font(.system(size: 17, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(Color.red.opacity(0.8))  // 使用紅色表示登出
+                                .cornerRadius(12)
+                        }
                     }
                 } else {
                     Button {
@@ -53,13 +68,18 @@ struct LoginView: View {
 #if compiler(>=5.9)
         .onChange(of: authService.isAuthenticated) { oldValue, newValue in
             if newValue {
-                dismiss()
+                // 當登入成功時，延遲一下再關閉頁面，讓用戶看到登入成功的訊息
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    dismiss()
+                }
             }
         }
 #else
         .onChange(of: authService.isAuthenticated) { value in
             if value {
-                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    dismiss()
+                }
             }
         }
 #endif
