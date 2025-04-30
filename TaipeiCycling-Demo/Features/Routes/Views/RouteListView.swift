@@ -94,9 +94,6 @@ struct RouteListView: View {
                 LoginView()
             }
         }
-        .onAppear {
-            viewModel.fetchRoutes()
-        }
         .onChange(of: authService.isAuthenticated) { _, newValue in
             viewModel.fetchRoutes()
         }
@@ -154,7 +151,7 @@ struct RouteRow: View {
     }
 }
 
-// 路線詳情視圖（我們需要創建這個視圖）
+// 路線詳情視圖
 struct RouteDetailView: View {
     let route: BikeRoute
     

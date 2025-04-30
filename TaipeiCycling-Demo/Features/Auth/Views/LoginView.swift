@@ -4,6 +4,7 @@ import OAuthSwift
 struct LoginView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var authService = StravaAuthService.shared
+    @AppStorage("selectedTab") private var selectedTab: Int = 0
     
     var body: some View {
         VStack(spacing: 24) {
@@ -35,6 +36,13 @@ struct LoginView: View {
                         // 添加登出按鈕
                         Button {
                             authService.logout()
+                            // 登出後關閉頁面，並重置選中頁面
+                            dismiss()
+                            selectedTab = 0
+                            NotificationCenter.default.post(
+                                name: NSNotification.Name("UserLoggedOut"), 
+                                object: nil
+                            )
                         } label: {
                             Text("登出 Strava")
                                 .font(.system(size: 17, weight: .semibold))
@@ -77,6 +85,7 @@ struct LoginView: View {
 #else
         .onChange(of: authService.isAuthenticated) { value in
             if value {
+                // 當登入成功時，延遲一下再關閉頁面，讓用戶看到登入成功的訊息
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     dismiss()
                 }
