@@ -1,6 +1,6 @@
 import Foundation
 
-class WeatherViewModel: ObservableObject {
+class MonitorViewModel: ObservableObject {
     @Published var currentWeather: Weather?
     
     func fetchWeather() {

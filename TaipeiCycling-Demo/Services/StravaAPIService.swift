@@ -8,12 +8,12 @@ class StravaAPIService {
     
     private init() {}
     
+    // 使用 "athlete/routes" 端點獲取當前用戶的路線
     func fetchUserRoutes() async throws -> [BikeRoute] {
         guard let token = UserDefaults.standard.string(forKey: "strava_token") else {
             throw APIError.notAuthenticated
         }
         
-        // 使用 "athlete/routes" 端點獲取當前用戶的路線
         let urlString = "\(baseURL)/athlete/routes"
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
@@ -50,14 +50,16 @@ class StravaAPIService {
                 name: stravaRoute.name,
                 description: stravaRoute.description ?? "無描述",
                 distance: stravaRoute.distance / 1000, // 轉換為公里
+                // elevation_gain: stravaRoute.elevation_gain,
+                // estimated_moving_time: stravaRoute.estimated_moving_time,
                 coordinates: [], // 如果需要具體路徑，可以再發送請求獲取
                 difficulty: determineDifficulty(distance: stravaRoute.distance, elevation: stravaRoute.elevation_gain)
             )
         }
     }
     
+    // 基於距離和爬升簡單計算難度
     private func determineDifficulty(distance: Double, elevation: Double) -> BikeRoute.RouteDifficulty {
-        // 基於距離和爬升簡單計算難度
         let distanceKm = distance / 1000
         
         if elevation > 500 || distanceKm > 40 {
@@ -85,6 +87,7 @@ struct StravaRoute: Codable {
     let description: String?
     let distance: Double
     let elevation_gain: Double
+    let estimated_moving_time: Int
     let map: RouteMap
     
     struct RouteMap: Codable {

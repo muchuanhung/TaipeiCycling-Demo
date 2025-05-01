@@ -18,9 +18,9 @@ struct ContentView: View {
                 }
                 .tag(0)
             
-            MapView()
+            GroupView()
                 .tabItem {
-                    Label("地圖", systemImage: "map")
+                    Label("約騎", systemImage: "figure.walk.diamond")
                 }
                 .tag(1)
             
@@ -30,15 +30,15 @@ struct ContentView: View {
                 }
                 .tag(2)
             
-            WeatherView()
+            MonitorView()
                 .tabItem {
-                    Label("天氣", systemImage: "cloud.sun")
+                    Label("路況監控", systemImage: "exclamationmark.triangle")
                 }
                 .tag(3)
-            TestView() // UIKit 包裝的 View
-                .tabItem {
-                    Label("個人", systemImage: "person.circle")
-                }
+            // TestView() // UIKit 包裝的 View
+            //     .tabItem {
+            //         Label("個人", systemImage: "person.circle")
+            //     }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserLoggedOut"))) { _ in
             // 確保在收到通知時也切換到首頁

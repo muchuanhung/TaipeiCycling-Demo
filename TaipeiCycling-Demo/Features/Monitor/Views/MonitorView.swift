@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct WeatherView: View {
-    @StateObject private var viewModel = WeatherViewModel()
+struct MonitorView: View {
+    @StateObject private var viewModel = MonitorViewModel()
     
     var body: some View {
         VStack {
-            Text("天氣資訊")
+            Text("路段警示 / 道路封閉")
                 .font(.title)
             // Weather content will be implemented later
         }

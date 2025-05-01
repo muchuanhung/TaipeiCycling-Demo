@@ -1,12 +1,12 @@
 import SwiftUI
 import MapKit
 
-struct MapView: View {
-    @StateObject private var viewModel = MapViewModel()
+struct GroupView: View {
+    @StateObject private var viewModel = GroupViewModel()
     
     var body: some View {
           VStack {
-            Text("地圖資訊")
+            Text("約騎資訊")
                 .font(.title)
             // Weather content will be implemented later
         }
