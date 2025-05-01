@@ -50,24 +50,10 @@ class StravaAPIService {
                 name: stravaRoute.name,
                 description: stravaRoute.description ?? "無描述",
                 distance: stravaRoute.distance / 1000, // 轉換為公里
-                // elevation_gain: stravaRoute.elevation_gain,
-                // estimated_moving_time: stravaRoute.estimated_moving_time,
-                coordinates: [], // 如果需要具體路徑，可以再發送請求獲取
-                difficulty: determineDifficulty(distance: stravaRoute.distance, elevation: stravaRoute.elevation_gain)
+                elevation_gain: stravaRoute.elevation_gain,
+                estimated_moving_time: stravaRoute.estimated_moving_time,
+                coordinates: [] // 如果需要具體路徑，可以再發送請求獲取
             )
-        }
-    }
-    
-    // 基於距離和爬升簡單計算難度
-    private func determineDifficulty(distance: Double, elevation: Double) -> BikeRoute.RouteDifficulty {
-        let distanceKm = distance / 1000
-        
-        if elevation > 500 || distanceKm > 40 {
-            return .difficult
-        } else if elevation > 200 || distanceKm > 20 {
-            return .moderate
-        } else {
-            return .easy
         }
     }
     
@@ -87,7 +73,7 @@ struct StravaRoute: Codable {
     let description: String?
     let distance: Double
     let elevation_gain: Double
-    let estimated_moving_time: Int
+    let estimated_moving_time: Double
     let map: RouteMap
     
     struct RouteMap: Codable {

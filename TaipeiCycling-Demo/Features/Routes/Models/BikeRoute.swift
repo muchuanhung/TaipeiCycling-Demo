@@ -6,14 +6,7 @@ struct BikeRoute: Identifiable {
     let name: String
     let description: String
     let distance: Double
-    // let elevation_gain: Double
-    // let estimated_moving_time: Int
+    let elevation_gain: Double
+    let estimated_moving_time: Double
     let coordinates: [CLLocationCoordinate2D]
-    let difficulty: RouteDifficulty
-    
-    enum RouteDifficulty {
-        case easy
-        case moderate
-        case difficult
-    }
 } 

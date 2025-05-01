@@ -1,12 +1,14 @@
 import SwiftUI
 
 struct RouteListView: View {
+    // 狀態管理
     @StateObject private var viewModel = RouteListViewModel()
     @State private var showLoginSheet = false
     @ObservedObject private var authService = StravaAuthService.shared
     
     var body: some View {
         NavigationView {
+            // 條件渲染
             ZStack {
                 if viewModel.isLoading {
                     ProgressView("載入中...")
@@ -72,7 +74,9 @@ struct RouteListView: View {
                 }
             }
             .navigationTitle("我的路線")
+            // 工具欄
             .toolbar {
+                // 重新載入
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         viewModel.fetchRoutes()
@@ -80,7 +84,7 @@ struct RouteListView: View {
                         Image(systemName: "arrow.clockwise")
                     }
                 }
-                
+                // 登入
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showLoginSheet = true
@@ -94,6 +98,7 @@ struct RouteListView: View {
                 LoginView()
             }
         }
+        // 登入狀態變更
         .onChange(of: authService.isAuthenticated) { _, newValue in
             viewModel.fetchRoutes()
         }
@@ -108,45 +113,59 @@ struct RouteRow: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(route.name)
                 .font(.headline)
+                .lineLimit(1)
             
-            HStack {
-                Label("\(String(format: "%.1f", route.distance)) km", systemImage: "map")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+            HStack(alignment: .top) {
+                InfoLabel(
+                    value: String(format: "%.1f km", route.distance),
+                    systemImage: "bicycle"
+                )
                 
-                Spacer()
+                InfoLabel(
+                    value: String(format: "%.1f m", route.elevation_gain),
+                    systemImage: "mountain.2"
+                )
                 
-                difficultyView
+                InfoLabel(
+                    value: formattedTime(seconds: Int(route.estimated_moving_time)),
+                    systemImage: "clock"
+                )
             }
+            .padding(.top, 4)
         }
         .padding(.vertical, 4)
     }
     
-    var difficultyView: some View {
-        HStack {
-            Text(difficultyText)
-                .font(.caption)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 2)
-                .background(difficultyColor.opacity(0.2))
-                .foregroundColor(difficultyColor)
-                .cornerRadius(4)
+    // 格式化時間格式
+    private func formattedTime(seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        
+        if hours > 0 {
+            return "\(hours)小時\(minutes)分"
+        } else {
+            return "\(minutes)分鐘"
         }
     }
+}
+
+// 標籤元件樣式設定
+struct InfoLabel: View {
+    let value: String
+    let systemImage: String
     
-    var difficultyText: String {
-        switch route.difficulty {
-        case .easy: return "簡單"
-        case .moderate: return "中等"
-        case .difficult: return "困難"
-        }
-    }
-    
-    var difficultyColor: Color {
-        switch route.difficulty {
-        case .easy: return .green
-        case .moderate: return .orange
-        case .difficult: return .red
+    var body: some View {
+        VStack(alignment: .center) {
+            Label {
+                Text(value)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                    .minimumScaleFactor(0.8)
+            } icon: {
+                Image(systemName: systemImage)
+                    .foregroundColor(.gray)
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -163,20 +182,26 @@ struct RouteDetailView: View {
                     Text(route.name)
                         .font(.largeTitle)
                         .bold()
+                        .lineLimit(2)
                     
-                    HStack {
-                        Label("\(String(format: "%.1f", route.distance)) km", systemImage: "map")
+                    // 使用相同的固定佈局解決方案
+                    HStack(alignment: .top) {
+                        InfoLabel(
+                            value: String(format: "%.1f km", route.distance),
+                            systemImage: "bicycle"
+                        )
                         
-                        Spacer()
+                        InfoLabel(
+                            value: String(format: "%.1f m", route.elevation_gain),
+                            systemImage: "mountain.2"
+                        )
                         
-                        Text(difficultyText)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(difficultyColor.opacity(0.2))
-                            .foregroundColor(difficultyColor)
-                            .cornerRadius(6)
+                        InfoLabel(
+                            value: formattedTime(seconds: Int(route.estimated_moving_time)),
+                            systemImage: "clock"
+                        )
                     }
-                    .font(.headline)
+                    .padding(.vertical, 8)
                 }
                 .padding()
                 
@@ -205,19 +230,15 @@ struct RouteDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    var difficultyText: String {
-        switch route.difficulty {
-        case .easy: return "簡單"
-        case .moderate: return "中等"
-        case .difficult: return "困難"
-        }
-    }
-    
-    var difficultyColor: Color {
-        switch route.difficulty {
-        case .easy: return .green
-        case .moderate: return .orange
-        case .difficult: return .red
+    // 格式化時間為"x小時y分"格式
+    private func formattedTime(seconds: Int) -> String {
+        let hours = seconds / 3600
+        let minutes = (seconds % 3600) / 60
+        
+        if hours > 0 {
+            return "\(hours)小時\(minutes)分"
+        } else {
+            return "\(minutes)分鐘"
         }
     }
 } 
