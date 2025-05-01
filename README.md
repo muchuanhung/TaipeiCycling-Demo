@@ -1,10 +1,12 @@
+<img src="https://github.com/user-attachments/assets/71bff9ef-a15e-42be-8c98-64f7fc981cfe" alt="App-icon" width="100" />
+
+
 #  Velorder（Strava單車約騎 ＆ 氣象預報 ＆ 即時路況系統）－APP 開發
 ## 專案名稱
 Velorder
 
 ## 專案介紹
-Velorder 
-> 是一款整合Strava、氣象資料與即時交通資訊的智慧型約騎iOS APP。目標是讓騎士能夠更智慧地安排訓練與出遊時間，提供完整的騎乘規劃與安全預警服務。
+> Velorder 是一款整合Strava、氣象資料與即時交通資訊的智慧型約騎iOS APP。目標是讓騎士能夠更智慧地安排訓練與出遊時間，提供完整的騎乘規劃與安全預警服務。
 > 
 >解決「資訊分散」+「即時風險預警」的需求，是目前熱門 App 的補強性工具。
 ### 🚴‍♂️ Strava 單車約騎整合
